@@ -1,0 +1,21 @@
+version: '3.8'
+
+x-dev:
+    &proxy_conf
+    http_proxy: "${http_proxy}"
+    https_proxy: "${https_proxy}"
+services:
+    python_scripts_service:
+        container_name: ${APP_NAME}
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args: *proxy_conf
+        image: ${APP_NAME}_img
+        environment:
+            http_proxy: "${http_proxy}"
+            https_proxy: "${https_proxy}"
+        volumes:
+        - '.:/app'
+        restart: always
+        command: tail -f /dev/null

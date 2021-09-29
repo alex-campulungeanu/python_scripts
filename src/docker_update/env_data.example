@@ -1,0 +1,2 @@
+HTTP_PROXY=http://<User>:<Pass>@<host>:<port>
+HTTPS_PROXY=http://<User>:<Pass>@<host>:<port>
