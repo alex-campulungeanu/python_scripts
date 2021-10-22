@@ -49,7 +49,7 @@ cd /var/lib/docker/containers/
 
 ## TODO:
 - [ ] make a backup of config.v2.json before everything
-
+- [X] change only a docker at a time
 
 ## Testing
 

@@ -1,6 +1,7 @@
 import os
 import json
 import pprint
+import argparse
 
 ENV_DATA_FILE_NAME = 'env_data'
 CONTAINERS_DIR = '/host/var/lib/docker/containers'
@@ -31,12 +32,19 @@ def read_env():
 TODO: some try/except error handling will be useful, for now leave it for younger generation
 '''  
 
-def main():
+def main(container_list):
     envs = read_env()
+    print('[+] envs for update ', envs)
     if envs:
         #read all folders with containers
         containers_dirs = [name for name in os.listdir(CONTAINERS_DIR) if os.path.isdir(os.path.join(CONTAINERS_DIR, name))]
-        for dir in containers_dirs:
+        if container_list:
+            containers_dirs_filtered = filter(lambda container: container.startswith(tuple(container_list)), containers_dirs)
+            containers_dirs_filtered = list(containers_dirs_filtered)
+        else:
+            containers_dirs_filtered = containers_dirs
+        print('[+] containers to be updated ', containers_dirs_filtered)
+        for dir in containers_dirs_filtered:
             with open(os.path.join(os.path.dirname(__file__), f'{CONTAINERS_DIR}/{dir}/{DOCKER_JSON_FILE}'), 'r+') as file:
                 ## walk env variables and check docker json file
                 json_config = json.load(file)
@@ -60,4 +68,11 @@ def main():
         print('No environment variable has been provided for update !')
 
 if __name__ == '__main__':
-    main()
+    # main()
+    args_parser = argparse.ArgumentParser(description='Container list which will be updated')
+    args_parser.add_argument('-l', type=str, nargs='*')
+    containers = args_parser.parse_args()
+    container_list = []
+    if containers.l:
+        container_list = containers.l
+    main(container_list)
