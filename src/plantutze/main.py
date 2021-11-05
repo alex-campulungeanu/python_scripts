@@ -21,6 +21,8 @@ plant_sheet.write(0, 2, 'clasa')
 plant_sheet.write(0, 3, 'order')
 plant_sheet.write(0, 4, 'family')
 
+# empty more suggestions file:
+# open('more_suggestions.txt', 'w').close()
 
 for idx, plant in enumerate(plants):
     print(f'Datele pentru: {plant} cu idx: {idx}')
@@ -31,15 +33,22 @@ for idx, plant in enumerate(plants):
         continue
     suggestions_arr = suggestion_dict['suggestions']
 
-    genus = {}
-
-    for suggestion in suggestions_arr:
-        if suggestion['rank'] == 'genus':
-            genus = suggestion
-            break
-
-    # print(genus)
     try:
+        genus = {}
+        suggestion_cnt = 0
+        for suggestion in suggestions_arr:
+            if suggestion['rank'] == 'genus' and suggestion['status'] == 'synonym':
+                suggestion_cnt += 1
+                if suggestion_cnt == 1:
+                    genus = suggestion
+                # break
+        if suggestion_cnt > 1:
+            print('more suggestion')
+            # with open('more_suggestions.txt', 'a') as file:
+            #     file.write(plant+ "\n")
+            # sys.exit()
+        # print(genus)
+        # continue
         usage_id = genus['usageId']
         classification_req = requests.get(f'https://api.catalogueoflife.org/dataset/2344/taxon/{usage_id}/classification')
         classification_arr = classification_req.json()

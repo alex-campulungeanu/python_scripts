@@ -15,3 +15,8 @@ where Specii_ANPM_04.increngatura is null
 and Specii_ANPM_04.clasa is null 
 and Specii_ANPM_04.ordin is null 
 and Specii_ANPM_04.familia is null;
+
+
+## TESTE
+- Micraspis de 2 ori cu genus
+- Mimaeseoptilus  apare cu synonim si cu bare name
