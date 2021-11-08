@@ -16,6 +16,10 @@ and Specii_ANPM_04.clasa is null
 and Specii_ANPM_04.ordin is null 
 and Specii_ANPM_04.familia is null;
 
+UPDATE Specii_ANPM_04 
+SET gen = genus
+where gen is null
+and genus is not null;
 
 ## TESTE
 - Micraspis de 2 ori cu genus
