@@ -3,19 +3,20 @@ import time
 import xlwt
 from xlwt import Workbook
 import sys
+from datetime import datetime
 
 ORIGIN_FILE = 'genuri.txt'
 RESULT_FILE = 'completate.xls'
 
 with open(ORIGIN_FILE) as file:
     plants= file.read().splitlines()
-# plants = ['Taraxacum', 'Carnatia']
-# sys.exit()
+# plants = ['Caecosagitta', 'Cabera']
 
 
 ## create excel file
 wb = Workbook()
 plant_sheet = wb.add_sheet('plants')
+plant_sheet.write(0, 0, 'numele')
 plant_sheet.write(0, 1, 'phylum')
 plant_sheet.write(0, 2, 'clasa')
 plant_sheet.write(0, 3, 'order')
@@ -24,6 +25,12 @@ plant_sheet.write(0, 4, 'family')
 # empty more suggestions file:
 # open('more_suggestions.txt', 'w').close()
 
+def log_error(message):
+    with open('errors_log.txt', 'a') as file:
+        file.write(f'{datetime.now()} : {message}\n')
+
+
+# TODO: add follwing  into a main method
 for idx, plant in enumerate(plants):
     print(f'Datele pentru: {plant} cu idx: {idx}')
     plant_sheet.write(idx + 1,0, plant)
@@ -37,19 +44,16 @@ for idx, plant in enumerate(plants):
         genus = {}
         suggestion_cnt = 0
         for suggestion in suggestions_arr:
-            if suggestion['rank'] == 'genus' and suggestion['status'] == 'synonym':
+            if suggestion['rank'] == 'genus':
                 suggestion_cnt += 1
                 if suggestion_cnt == 1:
                     genus = suggestion
-                # break
-        if suggestion_cnt > 1:
-            print('more suggestion')
-            # with open('more_suggestions.txt', 'a') as file:
-            #     file.write(plant+ "\n")
-            # sys.exit()
-        # print(genus)
-        # continue
         usage_id = genus['usageId']
+
+        if suggestion_cnt > 1:
+            with open('multiple_suggestions.txt', 'a') as file:
+                file.write(plant+ "\n")
+        # continue
         classification_req = requests.get(f'https://api.catalogueoflife.org/dataset/2344/taxon/{usage_id}/classification')
         classification_arr = classification_req.json()
 
@@ -79,7 +83,7 @@ for idx, plant in enumerate(plants):
         # time.sleep(1)
         # if idx == 10:
         #     break
+        wb.save(RESULT_FILE)
     except Exception as e:
+        log_error(plant)
         continue
-
-    wb.save(RESULT_FILE)
