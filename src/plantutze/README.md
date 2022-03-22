@@ -1,3 +1,6 @@
+# Eunis
+nohup python -u /app/src/plantutze/eunis/specii.py --user gabriela > /app/src/plantutze/eunis/gabriela/output/output.log &
+
 # Plantute
 source ven/bin/activate
 - update genuri.txt

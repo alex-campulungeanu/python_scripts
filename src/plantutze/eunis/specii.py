@@ -25,17 +25,17 @@ SPECIES_LINK = 'https://eunis.eea.europa.eu/'
 #     species= file.read().splitlines()
 
 def get_input_species(file):
-    # with open(INPUT_FILE) as file:
-    #     species= file.read().splitlines()
-    species = [
-    # "Serapias vomeracea subsp. laxiflora (Soó) Gölz & H.R.Reinhard", 
-    "Romulea rosea var. australis",
-    #     "Hyparrhenia hirta ssp. hirta",
-    # 'Abies alba', 
-    # 'Achillea nana', 
-    # 'Abies alba subsp. nebrodensis',
-    # 'Acinos alpinus subsp. meridionalis'
-    ]
+    with open(INPUT_FILE) as file:
+        species= file.read().splitlines()
+    # species = [
+    #     "Centaurea plumosa var. carpatica", 
+    #     # "Romulea rosea var. australis",
+    #     # "Hyparrhenia hirta ssp. hirta",
+    #     # 'Abies alba', 
+    #     # 'Achillea nana', 
+    #     # 'Abies alba subsp. nebrodensis',
+    #     # 'Acinos alpinus subsp. meridionalis'
+    # ]
     return species
 
 ## create excel file
@@ -67,6 +67,7 @@ def get_result_list(specie: str, result_file: str):
     author = ''
     specia = ''
     sub_specia = ''
+    varietatea = ''
     # TODO: don't duplicate the ret values :(
     if (validation_alt == 'Valid species name'): # TODO: aici pot sa folosesc si culoarea green
         ret = extract_data_text(soup_species)
@@ -77,9 +78,9 @@ def get_result_list(specie: str, result_file: str):
         author = ret['author']
     elif (validation_alt == 'Invalid species name'):
         redirect = soup_species.select('span[class="redirection-msg"] a')
-        logger(f'redirect: {redirect}')
+        # logger(f'redirect: {redirect}')
         redirect_href = redirect[0]['href']
-        logger(f'redirect_href: {redirect_href}')
+        # logger(f'redirect_href: {redirect_href}')
         redirect_search = f'{SPECIES_LINK}{redirect_href}'
         soup_redirect = BeautifulSoup(urlopen(redirect_search), 'html.parser')
         ret = extract_data_text(soup_redirect)
@@ -96,7 +97,7 @@ def get_result_list(specie: str, result_file: str):
     species_sheet.write(idx + 1, 1, gen.strip())
     species_sheet.write(idx + 1, 2, specia.strip())
     species_sheet.write(idx + 1, 3, sub_specia.strip())
-    species_sheet.write(idx + 1, 4, sub_specia.strip())
+    species_sheet.write(idx + 1, 4, varietatea.strip())
     species_sheet.write(idx + 1, 5, author.strip())
     wb.save(result_file)
 if __name__ == '__main__':

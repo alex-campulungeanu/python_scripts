@@ -1,12 +1,11 @@
 from datetime import datetime
 from bs4 import BeautifulSoup
-from typing import List, Tuple
 
 def get_current_time():
     return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     
 # TODO: ENABLE_LOGGER i can pass it as a cli parameter
-def logger(str, ENABLE_LOGGER=True):
+def logger(str, ENABLE_LOGGER=False):
     if ENABLE_LOGGER:
         print(str)
 
@@ -26,13 +25,13 @@ def extract_data_text(souped_page: BeautifulSoup):
     title_italics = souped_page.select('div[id="content"] h1 span.italics')
     # logger(f'title_italics: {title_italics}')
     title_italics_content = title_italics[0].text.strip()
-    # title_italics_content = 'Romulea rosea var. australis (Ewart) M.P.de Vos'
+    # title_italics_content = 'Romulea rosea var. australis'
     logger(f'title_italics_content: {title_italics_content}')
     gen = title_italics_content.split()[0]
     title_italics_content_second = " ".join(title_italics_content.split()[1:])
     logger(f'title_italics_content_second: {title_italics_content_second}')
     specia = title_italics_content_second.split('subsp.')[0]
-    if specia != '':
+    if specia == '':
         specia = title_italics_content_second.split('var. ')[0]
     logger(f'specia: {specia}')
     try:
