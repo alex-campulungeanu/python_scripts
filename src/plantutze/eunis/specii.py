@@ -48,7 +48,7 @@ species_sheet.write(0, 3, 'subspecia')
 species_sheet.write(0, 4, 'varietatea')
 species_sheet.write(0, 5, 'autorul')
 
-def get_result_list(specie: str, result_file: str):
+def get_result_list(specie: str, result_file: str, idx: int):
     encoded_specie = urllib.parse.quote_plus(specie)
     species_sheet.write(idx + 1, 0, specie.strip())
     to_search = f'https://eunis.eea.europa.eu/species-names-result.jsp?comeFromQuickSearch=true&showGroup=true&showOrder=true&showFamily=true&showScientificName=true&showValidName=true&showOtherInfo=true&relationOp=3&searchVernacular=true&searchSynonyms=true&sort=3&ascendency=1&scientificName={encoded_specie}&Submit=Search'
@@ -103,21 +103,27 @@ def get_result_list(specie: str, result_file: str):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Fetch species from unies site')
     parser.add_argument('--user', help='The user for whom we extract data')
+    parser.add_argument('--file', help='The file for analizing')
     args = parser.parse_args()
-    print(f'START: {get_current_time()}')
     if args.user == None:
         print('USER MUST BE FILLED !')
+    if args.file == None:
+        print('FILE MUST BE PROVIDED !')
     else:
+        print(f'START: {get_current_time()}')
         user_analyzed = args.user
+        file_analyzed = args.file
         USER = user_analyzed
-        INPUT_FILE = f'./{USER}/input/{USER}_input.txt'
-        RESULT_FILE = f'./{USER}/output/{USER}_filled.xls'
-        ERROR_FILE = f'./{USER}/output/{USER}_errors.txt'
+        BASE_FILE = file_analyzed.rpartition('.')[0]
+        print(f'Fisier analizat {file_analyzed}')
+        INPUT_FILE = f'./{USER}/input/{file_analyzed}'
+        RESULT_FILE = f'./{USER}/output/{BASE_FILE}_filled.xls'
+        ERROR_FILE = f'./{USER}/output/{BASE_FILE}_errors.txt'
         species = get_input_species(INPUT_FILE)
         for idx, specie in enumerate(species):
             logger('\n')
             try:
-                get_result_list(specie, RESULT_FILE)
+                get_result_list(specie, RESULT_FILE, idx)
                 print(f'{idx} {USER} {get_current_time()} -> SPECIE analizata: {specie}')
                 # if idx % 5 == 0:
                 #     log_error(f'health check: {idx}', ERROR_FILE)    
@@ -125,5 +131,5 @@ if __name__ == '__main__':
                 print(f'{USER} {get_current_time()} -> EROARE: {specie}')
                 log_error(f'{idx} # {get_current_time()} {specie} # {traceback.format_exc()}', ERROR_FILE)
                 continue
-    print(f'END: {get_current_time()}')
+        print(f'END: {get_current_time()}')
                 
