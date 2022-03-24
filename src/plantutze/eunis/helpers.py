@@ -21,28 +21,32 @@ def extract_data_text(souped_page: BeautifulSoup):
         'sub_specia': '',
         'varietatea': '',
     })
+    gen = ''
+    author = ''
+    specia = ''
+    sub_specia = ''
     varietatea = ''
     title_italics = souped_page.select('div[id="content"] h1 span.italics')
-    # logger(f'title_italics: {title_italics}')
+    logger(f'title_italics: {title_italics}')
     title_italics_content = title_italics[0].text.strip()
+    # title_italics_content = 'Trisetum specia subsp. subspecia var. varietatea'
     # title_italics_content = 'Romulea rosea var. australis'
     logger(f'title_italics_content: {title_italics_content}')
     gen = title_italics_content.split()[0]
     title_italics_content_second = " ".join(title_italics_content.split()[1:])
     logger(f'title_italics_content_second: {title_italics_content_second}')
-    specia = title_italics_content_second.split('subsp.')[0]
-    if specia == '':
-        specia = title_italics_content_second.split('var. ')[0]
-    logger(f'specia: {specia}')
-    try:
+    if 'subsp.' in title_italics_content_second and 'var.' in title_italics_content_second:
+        specia = title_italics_content_second.split('subsp.')[0]
+        sub_specia = "".join(title_italics_content_second.split('subsp.')[1]).split('var.')[0]
+        varietatea = "".join(title_italics_content_second.split('subsp.')[1]).split('var.')[1]
+    elif 'subsp.' in title_italics_content_second:
+        specia = title_italics_content_second.split('subsp.')[0]
         sub_specia = title_italics_content_second.split('subsp.')[1]
-        logger(f'sub_specia: {sub_specia}')
-    except IndexError as e:
-        try:
-            varietatea = title_italics_content_second.split('var.')[1]
-        except IndexError as e2:
-            varietatea = ''
-        sub_specia = ''
+    elif 'var.' in title_italics_content_second:
+        specia = title_italics_content_second.split('var.')[0]
+        varietatea = title_italics_content_second.split('var.')[1]
+    else:
+        specia = title_italics_content_second
     # TODO: fix next error "text" is not a known member of "None"
     author = title_italics[0].next_sibling.text.strip()
     ret['gen'] = gen
