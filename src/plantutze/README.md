@@ -1,5 +1,5 @@
 # Eunis
-nohup python -u /app/src/plantutze/eunis/specii.py --user gabriela > /app/src/plantutze/eunis/gabriela/output/output.log &
+nohup python -u /app/src/plantutze/eunis/specii.py --user gabriela --file input_1.txt > /app/src/plantutze/eunis/gabriela/output/output_1.log &
 
 # Plantute
 source ven/bin/activate
