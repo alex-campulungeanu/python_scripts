@@ -1,8 +1,7 @@
 # TODO: sda
 # - sa mormalizez stringul din baza de date (inlocuiesc spatiul cu plus: "Abies alba" => "Abies+alba")
 
-# https://eunis.eea.europa.eu/species.jsp
-# Abies+alba
+# Trisetum flavescens ssp. flavescens var. corsicum
 # Achillea nana
 # Abies alba subsp. nebrodensis 
 # Acinos alpinus subsp. meridionalis
@@ -29,12 +28,13 @@ def get_input_species(file):
         species= file.read().splitlines()
     # species = [
     #     "Centaurea plumosa var. carpatica", 
-    #     # "Romulea rosea var. australis",
-    #     # "Hyparrhenia hirta ssp. hirta",
-    #     # 'Abies alba', 
-    #     # 'Achillea nana', 
-    #     # 'Abies alba subsp. nebrodensis',
-    #     # 'Acinos alpinus subsp. meridionalis'
+    #     "Romulea rosea var. australis",
+    #     "Hyparrhenia hirta ssp. hirta",
+    #     'Abies alba', 
+    #     'Achillea nana', 
+    #     'Abies alba subsp. nebrodensis',
+    #     'Acinos alpinus subsp. meridionalis',
+    #     'Trisetum flavescens ssp. flavescens var. corsicum'
     # ]
     return species
 
