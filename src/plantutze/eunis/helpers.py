@@ -16,15 +16,15 @@ def log_error(message, error_file):
 def extract_data_text(souped_page: BeautifulSoup):
     ret = dict({
         'gen': '',
-        'author': '',
+        'autorul': '',
         'specia': '',
-        'sub_specia': '',
+        'subspecia': '',
         'varietatea': '',
     })
     gen = ''
-    author = ''
+    autorul = ''
     specia = ''
-    sub_specia = ''
+    subspecia = ''
     varietatea = ''
     title_italics = souped_page.select('div[id="content"] h1 span.italics')
     logger(f'title_italics: {title_italics}')
@@ -37,21 +37,21 @@ def extract_data_text(souped_page: BeautifulSoup):
     logger(f'title_italics_content_second: {title_italics_content_second}')
     if 'subsp.' in title_italics_content_second and 'var.' in title_italics_content_second:
         specia = title_italics_content_second.split('subsp.')[0]
-        sub_specia = "".join(title_italics_content_second.split('subsp.')[1]).split('var.')[0]
+        subspecia = "".join(title_italics_content_second.split('subsp.')[1]).split('var.')[0]
         varietatea = "".join(title_italics_content_second.split('subsp.')[1]).split('var.')[1]
     elif 'subsp.' in title_italics_content_second:
         specia = title_italics_content_second.split('subsp.')[0]
-        sub_specia = title_italics_content_second.split('subsp.')[1]
+        subspecia = title_italics_content_second.split('subsp.')[1]
     elif 'var.' in title_italics_content_second:
         specia = title_italics_content_second.split('var.')[0]
         varietatea = title_italics_content_second.split('var.')[1]
     else:
         specia = title_italics_content_second
     # TODO: fix next error "text" is not a known member of "None"
-    author = title_italics[0].next_sibling.text.strip()
+    autorul = title_italics[0].next_sibling.text.strip()
     ret['gen'] = gen
     ret['specia'] = specia
-    ret['sub_specia'] = sub_specia
+    ret['subspecia'] = subspecia
     ret['varietatea'] = varietatea
-    ret['author'] = author
+    ret['autorul'] = autorul
     return ret

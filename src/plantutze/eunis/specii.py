@@ -24,29 +24,32 @@ SPECIES_LINK = 'https://eunis.eea.europa.eu/'
 #     species= file.read().splitlines()
 
 def get_input_species(file):
-    with open(INPUT_FILE) as file:
-        species= file.read().splitlines()
-    # species = [
-    #     "Centaurea plumosa var. carpatica", 
-    #     "Romulea rosea var. australis",
-    #     "Hyparrhenia hirta ssp. hirta",
-    #     'Abies alba', 
-    #     'Achillea nana', 
-    #     'Abies alba subsp. nebrodensis',
-    #     'Acinos alpinus subsp. meridionalis',
-    #     'Trisetum flavescens ssp. flavescens var. corsicum'
-    # ]
+    # with open(INPUT_FILE) as file:
+    #     species= file.read().splitlines()
+    species = [
+        "Centaurea plumosa var. carpatica", 
+        "Romulea rosea var. australis",
+        "Hyparrhenia hirta ssp. hirta",
+        'Abies alba', 
+        'Achillea nana', 
+        'Abies alba subsp. nebrodensis',
+        'Acinos alpinus subsp. meridionalis',
+        'Trisetum flavescens ssp. flavescens var. corsicum'
+    ]
     return species
 
 ## create excel file
 wb = Workbook()
 species_sheet = wb.add_sheet('species')
 species_sheet.write(0, 0, 'numele')
-species_sheet.write(0, 1, 'genul')
-species_sheet.write(0, 2, 'specia')
-species_sheet.write(0, 3, 'subspecia')
-species_sheet.write(0, 4, 'varietatea')
-species_sheet.write(0, 5, 'autorul')
+species_sheet.write(0, 1, 'autorul_site')
+species_sheet.write(0, 2, 'genul')
+species_sheet.write(0, 3, 'specia')
+species_sheet.write(0, 4, 'autor_specia')
+species_sheet.write(0, 5, 'subspecia')
+species_sheet.write(0, 6, 'autor_subspecia')
+species_sheet.write(0, 7, 'varietatea')
+species_sheet.write(0, 8, 'autor_varietatea')
 
 def get_result_list(specie: str, result_file: str, idx: int):
     encoded_specie = urllib.parse.quote_plus(specie)
@@ -64,18 +67,21 @@ def get_result_list(specie: str, result_file: str, idx: int):
     # logger(f'species_search: {species_search}')
     soup_species = BeautifulSoup(urlopen(species_search), 'html.parser')
     gen = ''
-    author = ''
+    autor_site = ''
     specia = ''
-    sub_specia = ''
+    autor_specia = ''
+    subspecia = ''
+    autor_subspecia = ''
     varietatea = ''
+    autor_varietatea = ''
     # TODO: don't duplicate the ret values :(
     if (validation_alt == 'Valid species name'): # TODO: aici pot sa folosesc si culoarea green
         ret = extract_data_text(soup_species)
         gen = ret['gen']
         specia = ret['specia']
-        sub_specia = ret['sub_specia']
+        subspecia = ret['subspecia']
         varietatea = ret['varietatea']
-        author = ret['author']
+        autor_site = ret['autorul']
     elif (validation_alt == 'Invalid species name'):
         redirect = soup_species.select('span[class="redirection-msg"] a')
         # logger(f'redirect: {redirect}')
@@ -86,19 +92,30 @@ def get_result_list(specie: str, result_file: str, idx: int):
         ret = extract_data_text(soup_redirect)
         gen = ret['gen']
         specia = ret['specia']
-        sub_specia = ret['sub_specia']
+        subspecia = ret['subspecia']
         varietatea = ret['varietatea']
-        author = ret['author']
+        autor_site = ret['autorul']
     logger(f'gen: {gen}')
     logger(f'specia: {specia}')
-    logger(f'sub_specia: {sub_specia}')
+    logger(f'subspecia: {subspecia}')
     logger(f'varietatea: {varietatea}')
-    logger(f'author: {author}')
-    species_sheet.write(idx + 1, 1, gen.strip())
-    species_sheet.write(idx + 1, 2, specia.strip())
-    species_sheet.write(idx + 1, 3, sub_specia.strip())
-    species_sheet.write(idx + 1, 4, varietatea.strip())
-    species_sheet.write(idx + 1, 5, author.strip())
+    logger(f'autor_site: {autor_site}')
+    if specia != '' and subspecia != '' and varietatea != '':
+        autor_varietatea = autor_site
+    elif specia != '' and varietatea != '':
+        autor_varietatea = autor_site
+    elif specia != '' and subspecia != '':
+        autor_subspecia = autor_site
+    elif specia != '':
+        autor_specia = autor_site
+    species_sheet.write(idx + 1, 1, autor_site.strip())
+    species_sheet.write(idx + 1, 2, gen.strip())
+    species_sheet.write(idx + 1, 3, specia.strip())
+    species_sheet.write(idx + 1, 4, autor_specia.strip())
+    species_sheet.write(idx + 1, 5, subspecia.strip())
+    species_sheet.write(idx + 1, 6, autor_subspecia.strip())
+    species_sheet.write(idx + 1, 7, varietatea.strip())
+    species_sheet.write(idx + 1, 8, autor_varietatea.strip())
     wb.save(result_file)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Fetch species from unies site')
