@@ -9,16 +9,16 @@ source ven/bin/activate
 
 ## update
 
-UPDATE Specii_ANPM_04 
-INNER JOIN completate ON Specii_ANPM_04.Genus = completate.numele 
-SET Specii_ANPM_04.increngatura=completate.phylum,
-  Specii_ANPM_04.clasa = completate.clasa,
-  Specii_ANPM_04.ordin = completate.order,
-  Specii_ANPM_04.familia = completate.family
-where Specii_ANPM_04.increngatura is null 
-and Specii_ANPM_04.clasa is null 
-and Specii_ANPM_04.ordin is null 
-and Specii_ANPM_04.familia is null;
+UPDATE Specii_ANPM_08 
+INNER JOIN completate ON Specii_ANPM_08.Name = completate.numele 
+SET Specii_ANPM_08.SPECIA=completate.specia,
+  Specii_ANPM_08.AUTOR = completate.autorul,
+  Specii_ANPM_08.SUBSPECIA = completate.subspecia,
+  Specii_ANPM_08.VARIETATEA = completate.varietatea
+where Specii_ANPM_08.SPECIA is null 
+and Specii_ANPM_08.AUTOR is null 
+and Specii_ANPM_08.SUBSPECIA is null 
+and Specii_ANPM_08.VARIETATEA is null;
 
 UPDATE Specii_ANPM_04 
 SET gen = genus
