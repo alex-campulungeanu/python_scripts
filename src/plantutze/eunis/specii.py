@@ -24,18 +24,18 @@ SPECIES_LINK = 'https://eunis.eea.europa.eu/'
 #     species= file.read().splitlines()
 
 def get_input_species(file):
-    # with open(INPUT_FILE) as file:
-    #     species= file.read().splitlines()
-    species = [
-        "Centaurea plumosa var. carpatica", 
-        "Romulea rosea var. australis",
-        "Hyparrhenia hirta ssp. hirta",
-        'Abies alba', 
-        'Achillea nana', 
-        'Abies alba subsp. nebrodensis',
-        'Acinos alpinus subsp. meridionalis',
-        'Trisetum flavescens ssp. flavescens var. corsicum'
-    ]
+    with open(INPUT_FILE) as file:
+        species= file.read().splitlines()
+    # species = [
+    #     "Centaurea plumosa var. carpatica", 
+    #     "Romulea rosea var. australis",
+    #     "Hyparrhenia hirta ssp. hirta",
+    #     'Abies alba', 
+    #     'Achillea nana', 
+    #     'Abies alba subsp. nebrodensis',
+    #     'Acinos alpinus subsp. meridionalis',
+    #     'Trisetum flavescens ssp. flavescens var. corsicum'
+    # ]
     return species
 
 ## create excel file
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                 # if idx % 5 == 0:
                 #     log_error(f'health check: {idx}', ERROR_FILE)    
             except Exception as e:
-                print(f'{USER} {get_current_time()} -> EROARE: {specie}')
+                print(f'{idx} {USER} {get_current_time()} -> EROARE: {specie}')
                 log_error(f'{idx} # {get_current_time()} {specie} # {traceback.format_exc()}', ERROR_FILE)
                 continue
         print(f'END: {get_current_time()}')
