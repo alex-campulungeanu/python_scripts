@@ -7,6 +7,7 @@
 # Acinos alpinus subsp. meridionalis
 # Hyparrhenia hirta ssp. hirta
 # Romulea rosea var. australis
+# Acme alpestris -- animal
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -50,7 +51,12 @@ species_sheet.write(0, 5, 'subspecia')
 species_sheet.write(0, 6, 'autor_subspecia')
 species_sheet.write(0, 7, 'varietatea')
 species_sheet.write(0, 8, 'autor_varietatea')
+species_sheet.write(0, 9, 'phylum')
+species_sheet.write(0, 10, 'clasa')
+species_sheet.write(0, 11, 'order')
+species_sheet.write(0, 12, 'family')
 
+# TODO: to much duplicate code, fix it, don't be lazy (maybe a template with the excel columns it is a good idea)
 def get_result_list(specie: str, result_file: str, idx: int):
     encoded_specie = urllib.parse.quote_plus(specie)
     species_sheet.write(idx + 1, 0, specie.strip())
@@ -74,14 +80,18 @@ def get_result_list(specie: str, result_file: str, idx: int):
     autor_subspecia = ''
     varietatea = ''
     autor_varietatea = ''
+    phylum = ''
+    clasa = ''
+    order = ''
+    family = ''
     # TODO: don't duplicate the ret values :(
     if (validation_alt == 'Valid species name'): # TODO: aici pot sa folosesc si culoarea green
         ret = extract_data_text(soup_species)
-        gen = ret['gen']
-        specia = ret['specia']
-        subspecia = ret['subspecia']
-        varietatea = ret['varietatea']
-        autor_site = ret['autorul']
+        # gen = ret['gen']
+        # specia = ret['specia']
+        # subspecia = ret['subspecia']
+        # varietatea = ret['varietatea']
+        # autor_site = ret['autorul']
     elif (validation_alt == 'Invalid species name'):
         redirect = soup_species.select('span[class="redirection-msg"] a')
         # logger(f'redirect: {redirect}')
@@ -90,11 +100,15 @@ def get_result_list(specie: str, result_file: str, idx: int):
         redirect_search = f'{SPECIES_LINK}{redirect_href}'
         soup_redirect = BeautifulSoup(urlopen(redirect_search), 'html.parser')
         ret = extract_data_text(soup_redirect)
-        gen = ret['gen']
-        specia = ret['specia']
-        subspecia = ret['subspecia']
-        varietatea = ret['varietatea']
-        autor_site = ret['autorul']
+    gen = ret['gen']
+    specia = ret['specia']
+    subspecia = ret['subspecia']
+    varietatea = ret['varietatea']
+    autor_site = ret['autorul']
+    phylum = ret['phylum']
+    clasa = ret['clasa']
+    order = ret['order']
+    family = ret['family']
     logger(f'gen: {gen}')
     logger(f'specia: {specia}')
     logger(f'subspecia: {subspecia}')
@@ -116,6 +130,10 @@ def get_result_list(specie: str, result_file: str, idx: int):
     species_sheet.write(idx + 1, 6, autor_subspecia.strip())
     species_sheet.write(idx + 1, 7, varietatea.strip())
     species_sheet.write(idx + 1, 8, autor_varietatea.strip())
+    species_sheet.write(idx + 1, 9, phylum.strip())
+    species_sheet.write(idx + 1, 10, clasa.strip())
+    species_sheet.write(idx + 1, 11, order.strip())
+    species_sheet.write(idx + 1, 12, family.strip())
     wb.save(result_file)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Fetch species from unies site')
