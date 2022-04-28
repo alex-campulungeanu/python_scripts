@@ -72,6 +72,7 @@ def get_result_list(specie: str, result_file: str, idx: int):
     species_search = f'{SPECIES_LINK}{first_link_href}'
     # logger(f'species_search: {species_search}')
     soup_species = BeautifulSoup(urlopen(species_search), 'html.parser')
+    ret = {}
     gen = ''
     autor_site = ''
     specia = ''

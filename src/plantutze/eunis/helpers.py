@@ -5,7 +5,7 @@ def get_current_time():
     return datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     
 # TODO: ENABLE_LOGGER i can pass it as a cli parameter
-def logger(str, ENABLE_LOGGER=True):
+def logger(str, ENABLE_LOGGER=False):
     if ENABLE_LOGGER:
         print(str)
 
