@@ -23,6 +23,17 @@ and Specii_ANPM_10.AUTOR_SSP is null
 and Specii_ANPM_10.VARIETATEA is null
 and Specii_ANPM_10.AUTOR_VAR is null;
 
+UPDATE Specii_ANPM_08
+INNER JOIN completate ON Specii_ANPM_08.Name = completate.numele 
+SET Specii_ANPM_08.clasa=completate.clasa,
+  Specii_ANPM_08.INCRENGATURA = completate.phylum,
+  Specii_ANPM_08.ORDIN = completate.order,
+  Specii_ANPM_08.FAMILIA = completate.family
+<!-- where Specii_ANPM_08.INCRENGATURA is null 
+and Specii_ANPM_08.CLASA is null 
+and Specii_ANPM_08.ORDIN is null
+and Specii_ANPM_08.FAMILIA is null; -->
+
 UPDATE Specii_ANPM_04 
 SET gen = genus
 where gen is null
