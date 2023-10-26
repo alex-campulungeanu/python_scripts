@@ -13,4 +13,4 @@ while True:
     time.sleep(2)
     current_pos = win32api.GetCursorPos()
     if saved_pos != current_pos:
-        sys.exit("The use is now in control,  with great power comes great responsability !")
+        sys.exit("The use is now in control,  with great power comes great responsability !!")
