@@ -7,12 +7,7 @@ x-dev:
 services:
     python_scripts_service:
         container_name: ${APP_NAME}
-        image: python:3
-        # build:
-        #     context: .
-        #     dockerfile: Dockerfile
-        #     args: *proxy_conf
-        # image: ${APP_NAME}_img
+        image: python:3.9.18
         working_dir: /app
         environment:
             http_proxy: "${http_proxy}"
